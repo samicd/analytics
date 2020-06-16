@@ -146,7 +146,7 @@ def question4():
     home_tot_distance = tracking_home[tracking_home['Period'] == 1].diff().abs().sum() + tracking_home[
         tracking_home['Period'] == 2].diff().abs().sum()
     home_tot_distance = home_tot_distance.drop(['Period', 'Time [s]', 'ball_x', 'ball_y'])
-    z= 99999
+
     y = home_tot_distance[['_y' in s for s in home_tot_distance.index]]
     x = home_tot_distance[['_x' in s for s in home_tot_distance.index]]
     a = list(zip(x, y))
