@@ -6,8 +6,6 @@
 """
 import LS_functions.Metrica_IO as mio
 import LS_functions.Metrica_Viz as mviz
-import numpy as np
-
 
 # 1. Plot passes and shots leading up to the 2nd and 3rd goals
 def question1():
@@ -143,18 +141,26 @@ def question4():
     tracking_home = mio.to_metric_coordinates(tracking_home)
     tracking_away = mio.to_metric_coordinates(tracking_away)
 
+    # difference for every row in the first half absolute value and summed. Then added to the second half data.
     home_tot_distance = tracking_home[tracking_home['Period'] == 1].diff().abs().sum() + tracking_home[
         tracking_home['Period'] == 2].diff().abs().sum()
+
+    # Removing unnecessary columns
     home_tot_distance = home_tot_distance.drop(['Period', 'Time [s]', 'ball_x', 'ball_y'])
 
-    y = home_tot_distance[['_y' in s for s in home_tot_distance.index]]
-    x = home_tot_distance[['_x' in s for s in home_tot_distance.index]]
-    a = list(zip(x, y))
-    a = [x + y for (x, y) in a]
+    # seperating x and y coords for each player and zipping the values together and summing.
+    # This could be made more efficient.
+    home_tot_distance = list(zip(home_tot_distance[['_y' in s for s in home_tot_distance.index]], home_tot_distance[['_x' in s for s in home_tot_distance.index]]))
+    home_tot_distance = [x + y for (x, y) in home_tot_distance]
 
     away_tot_distance = tracking_away[tracking_away['Period'] == 1].diff().abs().sum() + tracking_away[
         tracking_away['Period'] == 2].diff().abs().sum()
+    away_tot_distance = away_tot_distance.drop(['Period', 'Time [s]', 'ball_x', 'ball_y'])
 
+    # seperating x and y coords for each player and zipping the values together and summing.
+    # This could be made more efficient.
+    away_tot_distance = list(zip(away_tot_distance[['_y' in s for s in away_tot_distance.index]], away_tot_distance[['_x' in s for s in away_tot_distance.index]]))
+    away_tot_distance = [x + y for (x, y) in away_tot_distance]
 
 if __name__ == '__main__':
     question4()
